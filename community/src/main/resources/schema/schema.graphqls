@@ -1,0 +1,19 @@
+type Query{
+    login(credentials: CredentialsInputDto!): String,
+    retrieve(username: String,password:String) : String
+}
+
+input CredentialsInputDto {
+username: String!
+password: String!
+}
+
+#
+#type Query{
+#    login(id: ID): [User]
+#}
+#
+#type User{
+#    username: String
+#    password: String
+#}
