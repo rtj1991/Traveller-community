@@ -19,14 +19,14 @@ public class UserDataFetcher {
     private UserRepository userRepository;
 
 //    @DgsData(parentType = "Query",field = "retrieve")
-    @DgsData(parentType = "Query",field = "login")
+    @DgsData(parentType = "Mutation",field = "login")
 //    public String getBooks(@InputArgument("username") String username,@InputArgument("password") String password,HttpServletRequest request){
-    public CredentialsInputDto getUser(CredentialsInputDto credentials){
+    public UserDetails getUser(CredentialsInputDto credentials){
         String username = credentials.getUsername();
         String password = credentials.getPassword();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        return credentials;
+        System.out.println("userDetails----> "+userDetails);
+        return userDetails;
     }
 }

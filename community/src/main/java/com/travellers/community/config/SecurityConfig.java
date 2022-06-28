@@ -39,24 +39,10 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/graphql").permitAll()
-//                .successHandler(loginHandler)
-//                .and()
-//                .logout().addLogoutHandler(logoutHandler)
-//                .logoutSuccessUrl("/login?logout")
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .sessionManagement()
-//                .maximumSessions(1)
-//                .expiredUrl("/login/login");
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/graphql").permitAll()
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
 //                .loginPage("/login").permitAll()
