@@ -43,9 +43,9 @@ public class User implements Serializable {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role")
-    private Role role;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "role")
+//    private Role role;
 
 //    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 //    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "id"))
