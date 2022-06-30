@@ -3,8 +3,8 @@ package com.travellers.community.dataFetcher;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.InputArgument;
+import com.travellers.community.config.jwt.JWTTokenGenerator;
 import com.travellers.community.dto.CredentialsInputDto;
-import com.travellers.community.model.Role;
 import com.travellers.community.model.User;
 import com.travellers.community.repository.UserRepository;
 import graphql.GraphQLException;
@@ -18,7 +18,7 @@ public class UserDataFetcher {
     private UserRepository userRepository;
 
     @Autowired
-    private TokenGenerator tokenGenerator;
+    private JWTTokenGenerator tokenGenerator;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

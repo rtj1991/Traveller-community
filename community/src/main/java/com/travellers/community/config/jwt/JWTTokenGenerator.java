@@ -5,10 +5,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.travellers.community.dataFetcher.TokenGenerator;
 import com.travellers.community.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class JWTTokenGenerator implements TokenGenerator {
 
     @Autowired

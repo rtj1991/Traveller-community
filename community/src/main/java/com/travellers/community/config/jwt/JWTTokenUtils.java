@@ -7,7 +7,9 @@ import com.travellers.community.config.TokenPayload;
 import com.travellers.community.config.TokenUtils;
 import com.travellers.community.model.Role;
 import com.travellers.community.model.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JWTTokenUtils extends TokenUtils {
 
     public TokenPayload decodeToken(String authorizationHeader) {
