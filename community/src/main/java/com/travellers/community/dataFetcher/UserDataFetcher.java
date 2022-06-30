@@ -2,42 +2,36 @@ package com.travellers.community.dataFetcher;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
+import com.netflix.graphql.dgs.InputArgument;
 import com.travellers.community.dto.CredentialsInputDto;
+import com.travellers.community.model.Role;
 import com.travellers.community.model.User;
 import com.travellers.community.repository.UserRepository;
-import com.travellers.community.service.TravellerUserDetailsService;
+import graphql.GraphQLException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @DgsComponent
 public class UserDataFetcher {
 
     @Autowired
-    private TravellerUserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-
-    @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("isAnonymous()")
+    @Autowired
+    private TokenGenerator tokenGenerator;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @DgsData(parentType = "Mutation", field = "login")
-    public User login(CredentialsInputDto credentials) {
-        String username = credentials.getUsername();
-        String password = credentials.getPassword();
-        UsernamePasswordAuthenticationToken credential = new UsernamePasswordAuthenticationToken(password, password);
-        try {
-            SecurityContextHolder.getContext().setAuthentication(authenticationProvider.authenticate(credential));
-            return userDetailsService.getCurrentUser();
-        } catch (AuthenticationException ex) {
-            throw new UsernameNotFoundException(username);
+    public String login(@InputArgument("username") String username, @InputArgument("password") String password) {
+        System.out.println("username---> "+username);
+        User user = userRepository.findByUsername(username);
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new GraphQLException("Invalid credentials");
         }
+        String build = tokenGenerator.build(user.getUsername(), user.getRoles());
+        return build;
     }
 
     @DgsData(parentType = "Mutation", field = "createUser")

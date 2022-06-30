@@ -38,6 +38,7 @@ public class Role implements Serializable {
 //    private List<User> users;
 
     @ManyToMany(mappedBy = "roles", fetch = LAZY)
+    @JsonIgnore
     private List<User> users;
 
 //    @Override
@@ -49,4 +50,11 @@ public class Role implements Serializable {
 //    }
 
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "role_id=" + role_id +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
