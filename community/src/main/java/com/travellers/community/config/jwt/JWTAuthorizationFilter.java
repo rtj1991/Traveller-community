@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,15 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+@Component
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private TokenUtils tokenUtils;
+    private final TokenUtils tokenUtils;
 
     public JWTAuthorizationFilter(AuthenticationManager authManager, TokenUtils tokenUtils) {
         super(authManager);
@@ -38,9 +38,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
-//        System.out.println("header---------> "+tokenUtils.getHeaderString());
-//        String header = req.getHeader(tokenUtils.getHeaderString());
-        String header = req.getHeader("Authorization");
+        System.out.println("tokenUtils-----> " + tokenUtils);
+        String header = req.getHeader(tokenUtils.getHeaderString());
         if (header == null || !header.startsWith(tokenUtils.getTokenPrefix())) {
             chain.doFilter(req, res);
             return;
@@ -53,21 +52,20 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(tokenUtils.getHeaderString());
+        String token = request.getHeader("Authorization");
         if (token != null) {
             TokenPayload tokenPayload = tokenUtils.decodeToken(token);
-
             if (tokenPayload.getUsername() != null) {
                 return new UsernamePasswordAuthenticationToken(tokenPayload.getUsername(), null, buildAutorities(tokenPayload.getRole()));
             }
-
             LOGGER.error("Valid token contains no user info");
         }
         return null;
     }
-    private List<GrantedAuthority> buildAutorities(List<Role> roles){
+
+    private List<GrantedAuthority> buildAutorities(List<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(Role role : roles){
+        for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
         return authorities;

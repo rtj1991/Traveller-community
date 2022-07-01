@@ -1,7 +1,6 @@
 package com.travellers.community.config;
 
 import com.travellers.community.model.Role;
-import com.travellers.community.model.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;

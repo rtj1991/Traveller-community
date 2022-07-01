@@ -36,7 +36,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/graphql").permitAll()
                 .antMatchers("/graphiql", "/vendor/graphiql/*").permitAll()
-//                .antMatchers("/h2-console/*").permitAll()
                 .anyRequest().denyAll()
                 .and()
                 .addFilter(new JWTAuthorizationFilter(getAuthenticationManager(), tokenUtils))

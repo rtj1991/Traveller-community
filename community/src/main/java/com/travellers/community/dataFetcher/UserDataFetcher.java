@@ -46,4 +46,9 @@ public class UserDataFetcher {
         user.setEnabled(credentials.getEnabled());
         return userRepository.save(user);
     }
+    @DgsData(parentType = "Query", field = "getUser")
+    public User getUser(@InputArgument("id") String id) {
+
+        return userRepository.findById(Integer.parseInt(id)).get();
+    }
 }
