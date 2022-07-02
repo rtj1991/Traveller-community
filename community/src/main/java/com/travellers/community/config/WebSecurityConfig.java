@@ -1,6 +1,7 @@
 package com.travellers.community.config;
 
 import com.travellers.community.config.jwt.JWTAuthorizationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManager();
     }
 
+    @Autowired
     protected TokenUtils tokenUtils;
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -35,11 +37,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/graphql").permitAll()
-                .antMatchers("/graphiql", "/vendor/graphiql/*").permitAll()
+                .antMatchers("/graphiql").permitAll()
                 .anyRequest().denyAll()
                 .and()
-                .addFilter(new JWTAuthorizationFilter(getAuthenticationManager(), tokenUtils))
-                // Disables sessions
+                .addFilter(new JWTAuthorizationFilter(getAuthenticationManager(),tokenUtils))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }

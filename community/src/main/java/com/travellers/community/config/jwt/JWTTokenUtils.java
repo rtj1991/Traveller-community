@@ -6,7 +6,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.travellers.community.config.TokenPayload;
 import com.travellers.community.config.TokenUtils;
 import com.travellers.community.model.Role;
-import com.travellers.community.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

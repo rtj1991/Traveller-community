@@ -33,22 +33,9 @@ public class Role implements Serializable {
     @Column(name = "enabled")
     private boolean enabled;
 
-//    @ManyToMany(mappedBy = "roles")
-//    @JsonIgnore
-//    private List<User> users;
-
     @ManyToMany(mappedBy = "roles", fetch = LAZY)
     @JsonIgnore
     private List<User> users;
-
-//    @Override
-//    public String toString(){
-//        return "Role{"+
-//                "roleId"+roleId+
-//                ",role='"+role+'\''+
-//                '}';
-//    }
-
 
     @Override
     public String toString() {

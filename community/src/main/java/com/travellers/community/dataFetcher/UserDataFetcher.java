@@ -9,6 +9,7 @@ import com.travellers.community.model.User;
 import com.travellers.community.repository.UserRepository;
 import graphql.GraphQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @DgsComponent
@@ -25,7 +26,6 @@ public class UserDataFetcher {
 
     @DgsData(parentType = "Mutation", field = "login")
     public String login(@InputArgument("username") String username, @InputArgument("password") String password) {
-        System.out.println("username---> "+username);
         User user = userRepository.findByUsername(username);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new GraphQLException("Invalid credentials");
@@ -46,9 +46,11 @@ public class UserDataFetcher {
         user.setEnabled(credentials.getEnabled());
         return userRepository.save(user);
     }
-    @DgsData(parentType = "Query", field = "getUser")
-    public User getUser(@InputArgument("id") String id) {
-
-        return userRepository.findById(Integer.parseInt(id)).get();
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DgsData(parentType = "Mutation", field = "getUser")
+    public String getUser(@InputArgument("id") String id) {
+        System.out.println("id---> "+userRepository.findById(Integer.valueOf(id)).get());
+        return "new User()-----> ";
+//        return (User) userRepository.findAll();
     }
 }

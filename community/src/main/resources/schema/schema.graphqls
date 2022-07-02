@@ -1,14 +1,19 @@
 type Mutation {
     createUser(user: CredentialsInputDto): User
     login(username: String!, password: String!): String
+    getUser(id:ID):String!
 }
 
-type Query{
-    getUser(id:ID):User
-}
+#type Query{
+#    getUser(id:ID):User
+#}
 
 type User {
-    id: ID!
+    user_id: ID!
+    first_name: String!
+    last_name: String!
+    nic: String!
+    email: String!
     username: String!
     role: Role!
 }
