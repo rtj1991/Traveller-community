@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class CredentialsInputDto {
-    private String first_name;
-    private String last_name;
-    private String nic;
+    private String name;
+    private String profile_pic;
+    public String dob;
+    public String gender;
+    public String location;
     private String email;
-    private String username;
     private String password;
-    private Boolean enabled;
 }

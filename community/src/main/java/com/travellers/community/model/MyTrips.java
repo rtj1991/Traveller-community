@@ -1,9 +1,9 @@
 package com.travellers.community.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,26 +11,32 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
-@Table(name = "role",schema = "public")
+@Table(name = "vist_places")
 @EntityListeners(AuditingEntityListener.class)
-public class Role implements Serializable {
+public class MyTrips implements Serializable {
 
     @Id
-    @Column(name = "role_id",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer role_id;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "role",nullable = false,unique = true)
-    private String role;
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "start_date")
+    private Date startDate;
+
+    @Column(name = "end_date")
+    private Date endDate;
+
+    @Column(name = "status",columnDefinition = "wants to visit=1 ,have visited=2")
+    private int status;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,18 +48,10 @@ public class Role implements Serializable {
     @Column(name = "timestamp_modified")
     private Date timestampModified;
 
-    @Column(name = "enabled")
-    private boolean enabled;
-
-    @ManyToMany(mappedBy = "roles", fetch = LAZY)
+    //    Many-to-One relation between user
+    @CreatedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
     @JsonIgnore
-    private List<User> users;
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "role_id=" + role_id +
-                ", role='" + role + '\'' +
-                '}';
-    }
+    private User user;
 }

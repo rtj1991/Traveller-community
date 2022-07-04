@@ -27,29 +27,30 @@ public class UserDataFetcher {
     private PasswordEncoder passwordEncoder;
 
     @DgsData(parentType = "Mutation", field = "login")
-    public String login(@InputArgument("username") String username, @InputArgument("password") String password) {
-        User user = userRepository.findByUsername(username);
+    public String login(@InputArgument("email") String email, @InputArgument("password") String password) {
+        User user = userRepository.findByEmail(email);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new GraphQLException("Invalid credentials");
         }
-        String build = tokenGenerator.build(user.getUsername(), user.getRoles());
+        String build = tokenGenerator.build(user.getEmail(), user.getRoles());
         return build;
     }
 
     @DgsData(parentType = "Mutation", field = "createUser")
     public User createUser(CredentialsInputDto credentials) {
         User user = new User();
-        user.setFirst_name(credentials.getFirst_name());
-        user.setLast_name(credentials.getLast_name());
-        user.setNic(credentials.getNic());
+        user.setName(credentials.getName());
+        user.setProfile_pic(credentials.getProfile_pic());
+        user.setDob(credentials.getDob());
+        user.setGender(credentials.getGender());
+        user.setLocation(credentials.getLocation());
         user.setEmail(credentials.getEmail());
-        user.setUsername(credentials.getUsername());
         user.setPassword(credentials.getPassword());
-        user.setEnabled(credentials.getEnabled());
         return userRepository.save(user);
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DgsData(parentType = "Mutation", field = "getUser")
+
+//    @PreAuthorize("hasAnyRole()")
+    @DgsData(parentType = "Query", field = "getUser")
     public List<User> getUser(@InputArgument("id") String id) {
         System.out.println("id---> "+userRepository.findById(Integer.valueOf(id)).get());
         return userRepository.findAll();
