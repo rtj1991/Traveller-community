@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @DgsComponent
 public class UserDataFetcher {
 
@@ -48,9 +50,9 @@ public class UserDataFetcher {
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @DgsData(parentType = "Mutation", field = "getUser")
-    public String getUser(@InputArgument("id") String id) {
+    public List<User> getUser(@InputArgument("id") String id) {
         System.out.println("id---> "+userRepository.findById(Integer.valueOf(id)).get());
-        return "new User()-----> ";
-//        return (User) userRepository.findAll();
+        return userRepository.findAll();
+//        return "new User()-----> ";
     }
 }
