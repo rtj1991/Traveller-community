@@ -1,4 +1,4 @@
-package com.travellers.community.dataFetcher;
+package com.travellers.community.config.jwt;
 
 import com.travellers.community.model.Role;
 import org.springframework.stereotype.Component;

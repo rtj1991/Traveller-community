@@ -3,13 +3,16 @@ package com.travellers.community.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "message")
+@Table(name = "message",schema = "public")
 public class Message implements Serializable {
 
     @Id
@@ -30,5 +33,15 @@ public class Message implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender")
     @JsonIgnore
-    private User sender;
+    private User userId;
+
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "timestamp_created")
+    private Date timestampCreated;
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "timestamp_modified")
+    private Date timestampModified;
 }
