@@ -57,19 +57,39 @@ public class User implements Serializable {
     }
 
 //    one-to-many relation between gallary
-    @OneToMany(mappedBy = "gallery")
+    @OneToMany(mappedBy = "userId")
     @JsonBackReference
-    private List<Gallery> galleryId;
+    private List<Gallery> galley;
 
     //    one-to-many relation between visit places
-    @OneToMany(mappedBy = "visit_places")
+    @OneToMany(mappedBy = "userId")
     @JsonBackReference
-    private List<MyTrips> visitPlaces;
+    private List<MyTrip> trips;
 
     //    one-to-many relation between review
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "userId")
+    @JsonBackReference
+    private List<Review> sender;
+
+    //    one-to-many relation between review
+    @OneToMany(mappedBy = "reviewer")
     @JsonBackReference
     private List<Review> review;
+
+    //    one-to-many relation between message
+    @OneToMany(mappedBy = "userId")
+    @JsonBackReference
+    private List<Message> messages;
+
+    //    one-to-many relation between follower
+    @OneToMany(mappedBy = "follower")
+    @JsonBackReference
+    private List<Follower> follower;
+
+    //    one-to-many relation between follower
+    @OneToMany(mappedBy = "followedby")
+    @JsonBackReference
+    private List<Follower> followedby;
 
 //    Many-to-many relation between role
     @ManyToMany(fetch = FetchType.EAGER)

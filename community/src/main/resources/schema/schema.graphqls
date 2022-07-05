@@ -1,32 +1,60 @@
 type Mutation {
-    createUser(user: CredentialsInputDto): User
+    createLoginUser(userInfo: UserInput): User
     login(email: String!, password: String!): String
-#    getUser(id:ID):String!
+    createTrip(tripInfo:TripInput):MyTrip
+    createReview(id:ID,review:ReviewInput):Review
 }
 
 type Query{
-    getUser(id:ID):User
+    getUser(id:ID): User
+    getAllTrip: [MyTrip]
+    followTraveller(follower:ID,followdby:ID):Follower
+    getTripandReviewById(id:ID):[Review]
 }
 
 type User {
-    user_id: ID!
-    first_name: String!
-    last_name: String!
-    nic: String!
-    email: String!
-    username: String!
-    role: Role!
+    name: String
+    profile_pic: String
+    dob: String
+    gender: String
+    location: String
+    email: String
 }
-enum Role {
-    NORMAL
-    ADMIN
+type MyTrip{
+    location: String
+    description: String
+    startDate: String
+    endDate: String
+    status: Int
 }
-input CredentialsInputDto {
-    first_name: String!
-    last_name: String!
-    nic: String!
-    email: String!
-    username: String!
-    password: String!
-    enabled: Boolean!
+type Follower{
+    follower:User
+    followedby:User
+}
+type Review{
+    rating:String
+    comment:String
+}
+
+input UserInput{
+    name: String
+    profile_pic: String
+    dob: String
+    gender: String
+    location: String
+    email: String
+    password: String
+}
+
+input TripInput{
+    location: String
+    description: String
+    startDate: String
+    endDate: String
+    status: Int
+}
+
+input ReviewInput{
+    rating:String
+    comment:String
 }

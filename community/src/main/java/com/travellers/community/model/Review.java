@@ -1,7 +1,6 @@
 package com.travellers.community.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,7 +13,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "review")
+@Table(name = "review",schema = "public")
 @EntityListeners(AuditingEntityListener.class)
 public class Review implements Serializable {
 
@@ -42,8 +41,13 @@ public class Review implements Serializable {
     //    Many-to-One relation between user
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "created_user")
     @JsonIgnore
-    private User user;
+    private User userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review")
+    @JsonIgnore
+    private MyTrip reviewer;
 
 }
