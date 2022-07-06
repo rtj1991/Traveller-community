@@ -1,22 +1,29 @@
 type Mutation {
-    createLoginUser(userInfo: UserInput): User
+    createLoginUser(userInfo: UserInput): Boolean
     login(email: String!, password: String!): String
     createTrip(tripInfo:TripInput):MyTrip
     createReview(id:ID,review:ReviewInput):Review
+    editLoginUser(id:ID,userInfo: UserInput): User
+    sendMessage(id:ID,inputMsg:MessageInfo):Message
 }
 
 type Query{
     getUser(id:ID): User
     getAllTrip: [MyTrip]
     followTraveller(follower:ID,followdby:ID):Follower
+    unFollowTraveller(follower:ID,followdby:ID):Follower
     getTripandReviewById(id:ID):[Review]
+    getAllUser:[User]
+    serarchTrips(location:String,date:String,gender:Int):[MyTrip]
+    upgradeUser(id:ID):Boolean
 }
 
 type User {
+    user_id:Int
     name: String
     profile_pic: String
     dob: String
-    gender: String
+    gender: Int
     location: String
     email: String
 }
@@ -35,12 +42,17 @@ type Review{
     rating:String
     comment:String
 }
+type Message{
+    message:String
+    receiver:User
+    sender:User
+}
 
 input UserInput{
     name: String
     profile_pic: String
     dob: String
-    gender: String
+    gender: Int
     location: String
     email: String
     password: String
@@ -57,4 +69,8 @@ input TripInput{
 input ReviewInput{
     rating:String
     comment:String
+}
+input MessageInfo{
+    message:String
+    receiver:Int
 }

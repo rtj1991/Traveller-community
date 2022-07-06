@@ -7,7 +7,7 @@ public class UserDto {
     public String name;
     public String profile_pic;
     public String dob;
-    public String gender;
+    public int gender;
     public String location;
     public String email;
     public String password;

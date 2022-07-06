@@ -13,7 +13,22 @@ public interface MyTripsService {
     List<MyTrip> getAllTrips();
 
     Follower traverllerFollows(String follower, String followdby);
+    Follower unFraverllerFollows(String follower, String followdby);
 
 
     List<Review> getAllTripByReview(int id);
+
+    List<MyTrip> getTripByLocationDateGender(String location, String date, int gender);
+
+    List<MyTrip> getTripByLocationDate(String location, String date);
+
+    List<MyTrip> getTripByDateGender(String date, int gender);
+
+    List<MyTrip> getTripByLocationGender(String location, int gender);
+
+    List<MyTrip> getTripByLocation(String location);
+
+    List<MyTrip> getTripByDate(String date);
+
+    List<MyTrip> getTripByGender(int gender);
 }

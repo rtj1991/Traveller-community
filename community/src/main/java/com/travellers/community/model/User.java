@@ -32,7 +32,7 @@ public class User implements Serializable {
     private String dob;
 
     @Column(name = "gender",nullable = false)
-    private String gender;
+    private int gender;
 
     @Column(name = "location",nullable = false)
     private String location;
@@ -77,9 +77,14 @@ public class User implements Serializable {
     private List<Review> review;
 
     //    one-to-many relation between message
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "receiver")
     @JsonBackReference
-    private List<Message> messages;
+    private List<Message> receive;
+
+    //    one-to-many relation between message
+    @OneToMany(mappedBy = "sender")
+    @JsonBackReference
+    private List<Message> msender;
 
     //    one-to-many relation between follower
     @OneToMany(mappedBy = "follower")

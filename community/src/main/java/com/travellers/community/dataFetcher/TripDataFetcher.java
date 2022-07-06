@@ -40,13 +40,40 @@ public class TripDataFetcher {
     }
 
     @DgsQuery
+    public Follower unFollowTraveller(@InputArgument("follower") String follower, @InputArgument("followdby") String followdby) {
+        return tripsService.unFraverllerFollows(follower, followdby);
+    }
+
+    @DgsQuery
     public List<Review> getTripandReviewById(@InputArgument("id") int id) {
         return tripsService.getAllTripByReview(id);
     }
 
     @DgsMutation
-    public Review createReview(@InputArgument("id")int id, ReviewDto review){
-        return reviewService.createReview(id,review);
+    public Review createReview(@InputArgument("id") int id, ReviewDto review) {
+        return reviewService.createReview(id, review);
+    }
+
+    @DgsQuery
+    public List<MyTrip> serarchTrips(@InputArgument("location") String location, @InputArgument("date") String date, @InputArgument("gender") int gender) {
+
+        List<MyTrip>myTrips = null;
+        if (!location.equals("") && !date.equals("") && gender != 0) {
+            myTrips=tripsService.getTripByLocationDateGender(location,date,gender);
+        }else if (!location.equals("") && !date.equals("") && gender==0){
+            myTrips=tripsService.getTripByLocationDate(location,date);
+        }else if (location.equals("") && !date.equals("") && gender!=0){
+            myTrips=tripsService.getTripByDateGender(date,gender);
+        }else if (!location.equals("") && date.equals("") && gender!=0){
+            myTrips=tripsService.getTripByLocationGender(location,gender);
+        }else if (!location.equals("") && date.equals("") && gender==0){
+            myTrips=tripsService.getTripByLocation(location);
+        }else if (location.equals("") && !date.equals("") && gender==0){
+            myTrips=tripsService.getTripByDate(date);
+        }else if (location.equals("") && date.equals("") && gender!=0){
+            myTrips=tripsService.getTripByGender(gender);
+        }
+        return myTrips;
     }
 
 }

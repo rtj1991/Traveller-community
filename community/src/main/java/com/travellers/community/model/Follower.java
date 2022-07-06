@@ -29,6 +29,9 @@ public class Follower {
     @JsonIgnore
     private User followedby;
 
+    @Column(name = "status")
+    private int status;
+
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "timestamp_created")

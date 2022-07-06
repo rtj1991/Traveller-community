@@ -46,7 +46,7 @@ public class Review implements Serializable {
     private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review")
+    @JoinColumn(name = "reviewer")
     @JsonIgnore
     private MyTrip reviewer;
 

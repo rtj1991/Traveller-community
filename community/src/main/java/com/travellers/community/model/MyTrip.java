@@ -36,7 +36,7 @@ public class MyTrip implements Serializable {
     @Column(name = "end_date")
     private Date endDate;
 
-    @Column(name = "status",columnDefinition = "wants to visit=1 ,have visited=2")
+    @Column(name = "status")
     private int status;
 
     @CreatedDate
@@ -53,7 +53,7 @@ public class MyTrip implements Serializable {
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_user")
-    @JsonIgnore
+    @JsonBackReference
     private User userId;
 
     //    one-to-many relation between follower

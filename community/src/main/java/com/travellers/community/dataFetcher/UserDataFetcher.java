@@ -1,9 +1,6 @@
 package com.travellers.community.dataFetcher;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import com.travellers.community.config.jwt.JWTTokenGenerator;
 import com.travellers.community.dto.UserDto;
 import com.travellers.community.model.User;
@@ -41,13 +38,34 @@ public class UserDataFetcher {
     }
 
     @DgsMutation
-    public User createLoginUser(UserDto userInfo) {
-        return userService.save(userInfo);
+    public Boolean createLoginUser(UserDto userInfo) {
+        User byEmail = userRepository.findByEmail(userInfo.getEmail());
+        if (byEmail == null) {
+            userService.saveUser(userInfo);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-//    @PreAuthorize("hasAnyRole()")
-    @DgsData(parentType = "Query", field = "getUser")
+    //    @PreAuthorize("hasAnyRole()")
+    @DgsQuery
     public User getUser(@InputArgument("id") String id) {
-        return userRepository.findById(Integer.valueOf(id)).get();
+        return userService.findUserById(id);
+    }
+
+    @DgsQuery
+    public List<User> getAllUser() {
+        return userService.findAllUsers();
+    }
+
+    @DgsMutation
+    public User editLoginUser(@InputArgument("id") int id, UserDto userInfo) {
+        return userService.editUser(id, userInfo);
+    }
+
+    @DgsQuery
+    public Boolean upgradeUser(@InputArgument("id") int id){
+        return userService.upgradePremiumUser(id);
     }
 }

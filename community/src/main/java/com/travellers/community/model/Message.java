@@ -24,16 +24,16 @@ public class Message implements Serializable {
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reviewer")
+    @JoinColumn(name = "receiver")
     @JsonIgnore
-    private User reviewer;
+    private User receiver;
 
     //    Many-to-One relation between user
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender")
     @JsonIgnore
-    private User userId;
+    private User sender;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
