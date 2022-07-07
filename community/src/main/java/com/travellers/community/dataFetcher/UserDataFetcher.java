@@ -3,6 +3,7 @@ package com.travellers.community.dataFetcher;
 import com.netflix.graphql.dgs.*;
 import com.travellers.community.config.jwt.JWTTokenGenerator;
 import com.travellers.community.dto.UserDto;
+import com.travellers.community.model.Role;
 import com.travellers.community.model.User;
 import com.travellers.community.repository.UserRepository;
 import com.travellers.community.service.user.UserService;
@@ -33,7 +34,7 @@ public class UserDataFetcher {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new GraphQLException("Invalid userInfo");
         }
-        String build = tokenGenerator.build(user.getEmail(), user.getRoles());
+        String build = tokenGenerator.build(user.getEmail(), (List<Role>) user.getRoles());
         return build;
     }
 

@@ -62,7 +62,10 @@ public class UserServiceImpl implements UserService{
     public Boolean upgradePremiumUser(int id) {
         User user = userRepository.findById(id).get();
         Role premium = roleRepository.findByRole("PREMIUM");
-        user.setRoles(Arrays.asList(premium));
+
+        user.removeRole(user.getRoles());
+        user.addRole(premium);
+
         User save = userRepository.save(user);
         if (save!=null){
             return true;

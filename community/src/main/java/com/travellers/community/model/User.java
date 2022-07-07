@@ -9,35 +9,37 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "user",schema = "public")
+@Table(name = "user", schema = "public")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements Serializable {
 
     @Id
-    @Column(name = "user_id",nullable = false)
+    @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user_id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "profile_pic")
     private String profile_pic;
 
-    @Column(name = "dob",nullable = false)
+    @Column(name = "dob", nullable = false)
     private String dob;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender", nullable = false)
     private int gender;
 
-    @Column(name = "location",nullable = false)
+    @Column(name = "location", nullable = false)
     private String location;
 
-    @Column(name = "email",nullable = false,unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password")
@@ -56,7 +58,7 @@ public class User implements Serializable {
     public User() {
     }
 
-//    one-to-many relation between gallary
+    //    one-to-many relation between gallary
     @OneToMany(mappedBy = "userId")
     @JsonBackReference
     private List<Gallery> galley;
@@ -96,10 +98,25 @@ public class User implements Serializable {
     @JsonBackReference
     private List<Follower> followedby;
 
-//    Many-to-many relation between role
+    //    Many-to-many relation between role
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "u_id", referencedColumnName = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "r_id", referencedColumnName = "role_id")})
+//    private List<Role> roles;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "u_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "r_id", referencedColumnName = "role_id")})
-    private List<Role> roles;
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Set<Role> role) {
+        this.roles.removeAll(role);
+    }
 
 }

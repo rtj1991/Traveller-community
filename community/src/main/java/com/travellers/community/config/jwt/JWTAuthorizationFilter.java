@@ -5,7 +5,6 @@ import com.travellers.community.config.TokenUtils;
 import com.travellers.community.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,7 +38,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader(tokenUtils.getHeaderString());
-        System.out.println("header----> "+req);
         if (header == null || !header.startsWith(tokenUtils.getTokenPrefix())) {
             chain.doFilter(req, res);
             return;
@@ -53,7 +51,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(tokenUtils.getHeaderString());
-        System.out.println("request---> "+request);
         if (token != null) {
             TokenPayload tokenPayload = tokenUtils.decodeToken(token);
             if (tokenPayload.getUsername() != null) {
