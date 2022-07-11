@@ -103,12 +103,13 @@ public class User implements Serializable {
 //    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "u_id", referencedColumnName = "user_id")},
 //            inverseJoinColumns = {@JoinColumn(name = "r_id", referencedColumnName = "role_id")})
 //    private List<Role> roles;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+//    private Set<Role> roles = new HashSet<>();
     private Set<Role> roles = new HashSet<>();
 
     public void addRole(Role role) {

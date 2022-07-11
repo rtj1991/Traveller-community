@@ -45,9 +45,6 @@ public class Role implements Serializable {
     @Column(name = "enabled")
     private boolean enabled;
 
-//    @ManyToMany(mappedBy = "roles", fetch = LAZY)
-//    private List<User> users;
-
     @Override
     public String toString() {
         return "Role{" +

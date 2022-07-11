@@ -10,10 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -24,6 +25,21 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(UserDto userDto) {
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add("ADMIN");
+        roles.add("PREMIUM");
+        roles.add("USERS");
+
+        for (String r : roles) {
+            Role role = new Role();
+            role.setRole(r);
+            role.setDescription(r);
+            role.setEnabled(true);
+            roleRepository.save(role);
+        }
+        Role user_role = roleRepository.findByRole("USERS");
+
         User user = new User();
 
         user.setName(userDto.getName());
@@ -32,6 +48,7 @@ public class UserServiceImpl implements UserService{
         user.setGender(userDto.getGender());
         user.setLocation(userDto.getLocation());
         user.setEmail(userDto.getEmail());
+        user.addRole(user_role);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }
@@ -67,9 +84,9 @@ public class UserServiceImpl implements UserService{
         user.addRole(premium);
 
         User save = userRepository.save(user);
-        if (save!=null){
+        if (save != null) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }

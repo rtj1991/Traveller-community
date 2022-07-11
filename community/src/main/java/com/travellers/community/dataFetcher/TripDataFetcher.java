@@ -12,6 +12,7 @@ import com.travellers.community.model.Review;
 import com.travellers.community.service.myTrips.MyTripsService;
 import com.travellers.community.service.review.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -28,32 +29,32 @@ public class TripDataFetcher {
     public MyTrip createTrip(TripDto tripInfo) {
         return tripsService.createTrip(tripInfo);
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery
     public List<MyTrip> getAllTrip() {
         return tripsService.getAllTrips();
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery
     public Follower followTraveller(@InputArgument("follower") String follower, @InputArgument("followdby") String followdby) {
         return tripsService.traverllerFollows(follower, followdby);
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery
     public Follower unFollowTraveller(@InputArgument("follower") String follower, @InputArgument("followdby") String followdby) {
         return tripsService.unFraverllerFollows(follower, followdby);
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery
     public List<Review> getTripandReviewById(@InputArgument("id") int id) {
         return tripsService.getAllTripByReview(id);
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsMutation
     public Review createReview(@InputArgument("id") int id, ReviewDto review) {
         return reviewService.createReview(id, review);
     }
-
+    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery
     public List<MyTrip> serarchTrips(@InputArgument("location") String location, @InputArgument("date") String date, @InputArgument("gender") int gender) {
 
