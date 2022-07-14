@@ -29,7 +29,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = req.getHeader(Const.HEADER_STRING);
         String username = null;
         String authToken = null;
-        System.out.println("header---> "+header);
         if (header != null && header.startsWith(Const.PREFIX)) {
             authToken = header.replace(Const.PREFIX,"");
             try {

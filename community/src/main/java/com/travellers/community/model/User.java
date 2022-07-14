@@ -98,11 +98,6 @@ public class User implements Serializable {
     @JsonBackReference
     private List<Follower> followedby;
 
-    //    Many-to-many relation between role
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "u_id", referencedColumnName = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "r_id", referencedColumnName = "role_id")})
-//    private List<Role> roles;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",

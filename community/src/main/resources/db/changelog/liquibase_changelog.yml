@@ -1,3 +1,5 @@
-#databaseChangeLog:
-#  - include:
-#      file: db/changelog/create-user-and-role.xml
+databaseChangeLog:
+  - include:
+      file: db/changelog/create-tables.xml
+  - include:
+      file: db/changelog/insert_roles.xml

@@ -50,7 +50,7 @@ public class UserDataFetcher {
         return token;
     }
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
+    @PreAuthorize("isAnonymous()")
     @DgsMutation
     public Boolean createLoginUser(UserDto userInfo) {
         User byEmail = userRepository.findByEmail(userInfo.getEmail());

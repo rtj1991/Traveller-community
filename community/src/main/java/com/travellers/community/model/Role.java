@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data

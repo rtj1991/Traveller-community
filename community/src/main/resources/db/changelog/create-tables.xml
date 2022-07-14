@@ -1,0 +1,189 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="thara" id="01">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="user_id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="dob" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+            <column name="profile_pic" type="varchar(255)"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="thara" id="02">
+        <createTable tableName="message">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="message_pkey"/>
+            </column>
+            <column name="message" type="varchar(255)"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="receiver" type="int"/>
+            <column name="sender" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="03">
+        <createTable tableName="follower">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="follower_pkey"/>
+            </column>
+            <column name="status" type="int"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="followedby" type="int"/>
+            <column name="follower" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="04">
+        <createTable tableName="users_roles">
+            <column name="user_id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_roles_pkey"/>
+            </column>
+            <column name="role_id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_roles_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="05">
+        <createTable tableName="my_trips">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="my_trips_pkey"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="end_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="location" type="varchar(255)"/>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="status" type="int"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_user" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="06">
+        <createTable tableName="review">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="review_pkey"/>
+            </column>
+            <column name="comment" type="varchar(255)"/>
+            <column name="rating" type="varchar(255)"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="reviewer" type="int"/>
+            <column name="created_user" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="07">
+        <createTable tableName="gallery">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gallery_pkey"/>
+            </column>
+            <column name="enabled" type="boolean"/>
+            <column name="image" type="varchar(255)"/>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_user" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="08">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="role_id" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="enabled" type="boolean"/>
+            <column name="role" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="timestamp_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="thara" id="09">
+        <addUniqueConstraint columnNames="email" constraintName="uk_email" tableName="user"/>
+    </changeSet>
+    <changeSet author="thara" id="10">
+        <addForeignKeyConstraint baseColumnNames="receiver" baseTableName="message"
+                                 constraintName="fk_receiver" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="11">
+        <addForeignKeyConstraint baseColumnNames="sender" baseTableName="message"
+                                 constraintName="fk_sender" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="12">
+        <addForeignKeyConstraint baseColumnNames="followedby" baseTableName="follower"
+                                 constraintName="fk_followedby" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="13">
+        <addForeignKeyConstraint baseColumnNames="follower" baseTableName="follower"
+                                 constraintName="fk_follower" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="14">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_roles"
+                                 constraintName="fk_user_id" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="15">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles"
+                                 constraintName="fk_role_id" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="role_id" referencedTableName="role" />
+    </changeSet>
+    <changeSet author="thara" id="16">
+        <addForeignKeyConstraint baseColumnNames="created_user" baseTableName="my_trips"
+                                 constraintName="fk_created_user" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="17">
+        <addForeignKeyConstraint baseColumnNames="reviewer" baseTableName="review"
+                                 constraintName="fk_reviewer" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="my_trips" />
+    </changeSet>
+    <changeSet author="thara" id="18">
+        <addForeignKeyConstraint baseColumnNames="created_user" baseTableName="review"
+                                 constraintName="fk_created_user" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="19">
+        <addForeignKeyConstraint baseColumnNames="created_user" baseTableName="gallery"
+                                 constraintName="fk_created_user" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="user_id" referencedTableName="user" />
+    </changeSet>
+    <changeSet author="thara" id="20">
+        <addUniqueConstraint columnNames="role" constraintName="uk_role" tableName="role"/>
+    </changeSet>
+
+</databaseChangeLog>

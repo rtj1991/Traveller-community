@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -25,19 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(UserDto userDto) {
-
-        HashSet<String> roles = new HashSet<>();
-        roles.add("ADMIN");
-        roles.add("PREMIUM");
-        roles.add("USERS");
-
-        for (String r : roles) {
-            Role role = new Role();
-            role.setRole(r);
-            role.setDescription(r);
-            role.setEnabled(true);
-            roleRepository.save(role);
-        }
         Role user_role = roleRepository.findByRole("USERS");
 
         User user = new User();
