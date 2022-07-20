@@ -68,7 +68,7 @@ public class UserDataFetcher {
     @DgsMutation(field = "createLoginUser")
     public Boolean createLoginUser(@InputArgument UserDto userInfo) {
 
-        if (!userMap().containsValue(userInfo.getEmail())) throw new DuplicateEntryException("Duplicate Entry Found");
+        if (!userMap().containsValue(userInfo.getEmail())) throw new DuplicateEntryException();
         User user = userMapper.modelToDto(userInfo);
         return true;
     }
@@ -95,7 +95,7 @@ public class UserDataFetcher {
     @DgsMutation(field = "editLoginUser")
     public User editLoginUser(@InputArgument("id") int id, @InputArgument UserDto userInfo) {
 
-        if (!userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
+        if (!userMap().containsKey(id)) throw new UserNotFoundException();
         User user = userMapper.modelToDto(userInfo);
         user.setUser_id(id);
         return userService.editUser(user);
@@ -105,7 +105,7 @@ public class UserDataFetcher {
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery(field = "upgradeUser")
     public Boolean upgradeUser(@InputArgument("id") int id) {
-        if (!userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
+        if (!userMap().containsKey(id)) throw new UserNotFoundException();
         try {
             return userService.upgradePremiumUser(id);
         } catch (NullPointerException e) {

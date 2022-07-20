@@ -30,7 +30,7 @@ public class MessageDataFetcher {
     @DgsMutation(field = "sendMessage")
     public Message sendMessage(@InputArgument("id") int id,@InputArgument MessageDto inputMsg) {
 
-        if (!userDataFetcher.userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
+        if (!userDataFetcher.userMap().containsKey(id)) throw new UserNotFoundException();
 
         User user = new User();
         user.setUser_id(id);
