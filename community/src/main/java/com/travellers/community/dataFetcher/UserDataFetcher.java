@@ -57,8 +57,9 @@ public class UserDataFetcher {
     @PreAuthorize("isAnonymous()")
     @DgsMutation
     public Boolean createLoginUser(@InputArgument UserDto userInfo) {
-        UserDto userDto = userMapper.dtoToModel(userRepository.findByEmail(userInfo.getEmail()));
-        if (userDto == null) {
+        User user_ = userRepository.findByEmail(userInfo.getEmail());
+        System.out.println("userDto-------> "+user_);
+        if (user_ == null) {
             User user = userMapper.modelToDto(userInfo);
             try {
                 userService.saveUser(user);
