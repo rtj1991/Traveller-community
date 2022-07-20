@@ -7,7 +7,7 @@ import com.netflix.graphql.dgs.InputArgument;
 import com.travellers.community.dto.FollowerDto;
 import com.travellers.community.dto.ReviewDto;
 import com.travellers.community.dto.TripDto;
-import com.travellers.community.exceptions.DuplicateEntryException;
+import com.travellers.community.exceptions.TripNotFoundException;
 import com.travellers.community.mapper.FollowerMapper;
 import com.travellers.community.mapper.MyTripMapper;
 import com.travellers.community.mapper.ReviewMapper;
@@ -55,10 +55,11 @@ public class TripDataFetcher {
     private FollowerRepository followerRepository;
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsMutation
+    @DgsMutation(field = "createTrip")
     public MyTrip createTrip(@InputArgument TripDto tripInfo) {
         try {
             MyTrip myTrip = myTripMapper.modelToDto(tripInfo);
+            if (myTrip==null)throw new TripNotFoundException();
             User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             myTrip.setUserId(user);
 
@@ -70,14 +71,14 @@ public class TripDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "getAllTrip")
     public List<MyTrip> getAllTrip() {
 
         return tripsService.getAllTrips();
     }
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "followTraveller")
     public Follower followTraveller(@InputArgument FollowerDto followerInfo) {
         Follower follower = followerMapper.modelToDto(followerInfo);
         follower.setStatus(Const.FOLLOW);
@@ -85,7 +86,7 @@ public class TripDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "unFollowTraveller")
     public Follower unFollowTraveller(@InputArgument FollowerDto followerInfo) {
         Follower follower = followerMapper.modelToDto(followerInfo);
         Follower follower_ = followerRepository.findByFollowedbyAndFollower(followerInfo.getFollowedby(), followerInfo.getFollower());
@@ -95,13 +96,13 @@ public class TripDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "getTripandReviewById")
     public List<Review> getTripandReviewById(@InputArgument("id") int id) {
         return tripsService.getAllTripByReview(id);
     }
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsMutation
+    @DgsMutation(field = "createReview")
     public Review createReview(@InputArgument("id") int id, @InputArgument ReviewDto review) {
         User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         MyTrip myTrip = tripsRepository.findById(id).orElse(null);
@@ -112,7 +113,7 @@ public class TripDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "serarchTrips")
     public List<MyTrip> serarchTrips(@InputArgument("location") String location, @InputArgument("date") String date, @InputArgument("gender") int gender) {
 
         List<MyTrip> myTrips = null;

@@ -7,7 +7,6 @@ import com.travellers.community.model.User;
 import com.travellers.community.repository.FollowerRepository;
 import com.travellers.community.repository.MyTripsRepository;
 import com.travellers.community.repository.ReviewRepository;
-import com.travellers.community.util.Const;
 import com.travellers.community.util.UtilManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

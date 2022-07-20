@@ -1,5 +1,5 @@
 package com.travellers.community.exceptions;
 
-public class DuplicateEntryException extends RuntimeException{
+public class TripNotFoundException extends RuntimeException{
     private static final long serialVersionUID = 1L;
 }

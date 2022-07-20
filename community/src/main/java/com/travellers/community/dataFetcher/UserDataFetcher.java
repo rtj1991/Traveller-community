@@ -4,20 +4,17 @@ import com.netflix.graphql.dgs.*;
 import com.travellers.community.config.TokenProvider;
 import com.travellers.community.dto.UserDto;
 import com.travellers.community.exceptions.DuplicateEntryException;
+import com.travellers.community.exceptions.UserNotFoundException;
 import com.travellers.community.mapper.UserMapper;
-import com.travellers.community.model.Role;
 import com.travellers.community.model.User;
 import com.travellers.community.repository.UserRepository;
 import com.travellers.community.service.user.UserService;
-import graphql.GraphQLException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -55,16 +52,15 @@ public class UserDataFetcher {
     }
 
     @PreAuthorize("isAnonymous()")
-    @DgsMutation
+    @DgsMutation(field = "createLoginUser")
     public Boolean createLoginUser(@InputArgument UserDto userInfo) {
         User user_ = userRepository.findByEmail(userInfo.getEmail());
-        System.out.println("userDto-------> "+user_);
         if (user_ == null) {
             User user = userMapper.modelToDto(userInfo);
             try {
                 userService.saveUser(user);
             } catch (DuplicateEntryException e) {
-                throw new DuplicateEntryException(e);
+                throw new DuplicateEntryException();
             }
             return true;
         } else {
@@ -73,7 +69,7 @@ public class UserDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "getUser")
     public User getUser(@InputArgument("id") String id) {
         try {
             return userService.findUserById(id);
@@ -91,22 +87,21 @@ public class UserDataFetcher {
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
-    @DgsMutation
-    public User editLoginUser(@InputArgument("id") int id, @InputArgument UserDto userInfo) throws Exception {
+    @DgsMutation(field = "editLoginUser")
+    public User editLoginUser(@InputArgument("id") int id, @InputArgument UserDto userInfo) {
+        User user_ = userRepository.findById(id).get();
+        if (user_ == null) throw new UserNotFoundException();
+        User user = userMapper.modelToDto(userInfo);
+        user.setUser_id(id);
+        return userService.editUser(user);
 
-        try {
-            User user = userMapper.modelToDto(userInfo);
-            user.setUser_id(id);
-            return userService.editUser(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
-    @DgsQuery
+    @DgsQuery(field = "upgradeUser")
     public Boolean upgradeUser(@InputArgument("id") int id) {
+        User user_ = userRepository.findById(id).get();
+        if (user_ == null) throw new UserNotFoundException();
         try {
             return userService.upgradePremiumUser(id);
         } catch (NullPointerException e) {
