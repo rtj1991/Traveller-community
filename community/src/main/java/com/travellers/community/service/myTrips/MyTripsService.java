@@ -8,12 +8,12 @@ import com.travellers.community.model.Review;
 import java.util.List;
 
 public interface MyTripsService {
-    MyTrip createTrip(TripDto tripDto);
+    MyTrip createTrip(MyTrip myTrip);
 
     List<MyTrip> getAllTrips();
 
-    Follower traverllerFollows(String follower, String followdby);
-    Follower unFraverllerFollows(String follower, String followdby);
+    Follower traverllerFollows(Follower follower);
+    Follower unFraverllerFollows(Follower follower);
 
 
     List<Review> getAllTripByReview(int id);

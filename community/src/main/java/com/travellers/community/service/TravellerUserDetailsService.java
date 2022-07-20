@@ -36,7 +36,8 @@ public class TravellerUserDetailsService implements UserDetailsService {
         user.getRoles().forEach(role -> {
             System.out.println("role--------> "+role.getRole());
             //authorities.add(new SimpleGrantedAuthority(role.getName()));
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole_id()));
+//            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole_id()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
         });
         return authorities;
         //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));

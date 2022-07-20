@@ -5,5 +5,7 @@ import com.travellers.community.model.Message;
 
 public interface MessageService {
 
-    Message sendMessage(int id, MessageDto inputMessage);
+    Message sendMessage(Message message);
+
+
 }

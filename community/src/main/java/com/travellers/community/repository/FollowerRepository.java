@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FollowerRepository extends JpaRepository<Follower,Integer> {
-    Follower findByFollowedbyAndAndFollower(User followedby,User follower);
+    Follower findByFollowedbyAndFollower(User followedby,User follower);
 }

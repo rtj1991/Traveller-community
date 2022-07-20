@@ -1,9 +1,12 @@
 package com.travellers.community.dto;
 
+import com.travellers.community.model.User;
 import lombok.Data;
 
 @Data
 public class MessageDto {
+    private Integer id;
     private String message;
-    private int receiver;
+    private User receiver;
+//    private User sender;
 }

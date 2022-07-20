@@ -5,6 +5,7 @@ import com.travellers.community.model.Message;
 import com.travellers.community.model.User;
 import com.travellers.community.repository.MessageRepository;
 import com.travellers.community.repository.UserRepository;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +15,8 @@ public class MessageServiceImpl implements MessageService{
     @Autowired
     private MessageRepository messageRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
-    public Message sendMessage(int id, MessageDto inputMessage) {
-
-        User senderUser = userRepository.findById(id).get();
-        User receiverUser = userRepository.findById(inputMessage.getReceiver()).get();
-
-        Message message = new Message();
-        message.setSender(senderUser);
-        message.setReceiver(receiverUser);
-        message.setMessage(inputMessage.getMessage());
+    public Message sendMessage(Message message) {
         return messageRepository.save(message);
     }
 }

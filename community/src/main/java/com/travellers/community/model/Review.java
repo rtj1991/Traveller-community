@@ -39,7 +39,7 @@ public class Review implements Serializable {
     private Date timestampModified;
 
     //    Many-to-One relation between user
-    @CreatedBy
+//    @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_user")
     @JsonIgnore

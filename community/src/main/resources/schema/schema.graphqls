@@ -10,8 +10,8 @@ type Mutation {
 type Query{
     getUser(id:ID): User
     getAllTrip: [MyTrip]
-    followTraveller(follower:ID,followdby:ID):Follower
-    unFollowTraveller(follower:ID,followdby:ID):Follower
+    followTraveller(followerInfo:FollowerInfo):Follower
+    unFollowTraveller(followerInfo:FollowerInfo):Follower
     getTripandReviewById(id:ID):[Review]
     getAllUser:[User]
     serarchTrips(location:String,date:String,gender:Int):[MyTrip]
@@ -49,6 +49,7 @@ type Message{
 }
 
 input UserInput{
+    user_id: Int
     name: String
     profile_pic: String
     dob: String
@@ -59,6 +60,7 @@ input UserInput{
 }
 
 input TripInput{
+    id: ID
     location: String
     description: String
     startDate: String
@@ -71,6 +73,12 @@ input ReviewInput{
     comment:String
 }
 input MessageInfo{
+    id:ID
     message:String
-    receiver:Int
+    receiver:UserInput
+}
+
+input FollowerInfo{
+    follower:UserInput
+    followedby:UserInput
 }

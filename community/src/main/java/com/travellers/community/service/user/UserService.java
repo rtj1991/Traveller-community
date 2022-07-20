@@ -6,9 +6,10 @@ import com.travellers.community.model.User;
 import java.util.List;
 
 public interface UserService {
-    User saveUser(UserDto userDto);
+//    User saveUser(UserDto userDto);
+    User saveUser(User userDto);
 
-    User editUser(int id, UserDto userInfo);
+    User editUser(User userInfo);
 
     User findUserById(String id);
 

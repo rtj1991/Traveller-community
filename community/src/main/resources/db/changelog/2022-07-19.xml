@@ -186,4 +186,22 @@
         <addUniqueConstraint columnNames="role" constraintName="uk_role" tableName="role"/>
     </changeSet>
 
+    <changeSet id="21" author="thara">
+        <insert tableName="role">
+            <column name="description" value="admin role"></column>
+            <column name="role" value="ADMIN"></column>
+            <column name="enabled" value="true"></column>
+        </insert>
+        <insert tableName="role">
+            <column name="description" value="premium role"></column>
+            <column name="role" value="PREMIUM"></column>
+            <column name="enabled" value="true"></column>
+        </insert>
+        <insert tableName="role">
+            <column name="description" value="user role"></column>
+            <column name="role" value="USERS"></column>
+            <column name="enabled" value="true"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

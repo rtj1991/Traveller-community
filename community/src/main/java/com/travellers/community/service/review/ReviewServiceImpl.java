@@ -16,17 +16,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    @Autowired
-    private MyTripsRepository tripsRepository;
-
     @Override
-    public Review createReview(int id, ReviewDto review) {
-        MyTrip myTrip = tripsRepository.findById(id).get();
-        Review review_ = new Review();
-        review_.setReviewer(myTrip);
-        review_.setComment(review.getComment());
-        review_.setRating(review.getRating());
-        review_.setTimestampCreated(new Date());
-        return reviewRepository.save(review_);
+    public Review createReview(Review review) {
+        return reviewRepository.save(review);
     }
 }

@@ -22,36 +22,21 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Override
-    public User saveUser(UserDto userDto) {
+    public User saveUser(User user) {
         Role user_role = roleRepository.findByRole("USERS");
-
-        User user = new User();
-
-        user.setName(userDto.getName());
-        user.setProfile_pic(userDto.getProfile_pic());
-        user.setDob(userDto.getDob());
-        user.setGender(userDto.getGender());
-        user.setLocation(userDto.getLocation());
-        user.setEmail(userDto.getEmail());
         user.addRole(user_role);
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     @Override
     public User findUserById(String id) {
-        return userRepository.findById(Integer.valueOf(id)).get();
+        return userRepository.findById(Integer.valueOf(id)).orElse(null);
     }
 
     @Override
-    public User editUser(int id, UserDto userDto) {
-        User user = userRepository.findById(id).get();
-        user.setName(userDto.getName());
-        user.setProfile_pic(userDto.getProfile_pic());
-        user.setDob(userDto.getDob());
-        user.setGender(userDto.getGender());
-        user.setLocation(userDto.getLocation());
-        user.setEmail(userDto.getEmail());
+    public User editUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
