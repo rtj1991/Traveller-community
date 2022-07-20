@@ -4,6 +4,7 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.InputArgument;
 import com.travellers.community.dto.MessageDto;
+import com.travellers.community.exceptions.DuplicateEntryException;
 import com.travellers.community.exceptions.UserNotFoundException;
 import com.travellers.community.mapper.MessageMapper;
 import com.travellers.community.model.Message;
@@ -23,13 +24,13 @@ public class MessageDataFetcher {
     private MessageMapper messageMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDataFetcher userDataFetcher;
 
     @PreAuthorize("hasAnyRole('ADMIN','PREMIUM')")
     @DgsMutation(field = "sendMessage")
     public Message sendMessage(@InputArgument("id") int id,@InputArgument MessageDto inputMsg) {
-        User user_ = userRepository.findById(id).get();
-        if (user_ == null) throw new UserNotFoundException();
+
+        if (!userDataFetcher.userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
 
         User user = new User();
         user.setUser_id(id);

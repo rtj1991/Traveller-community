@@ -115,22 +115,26 @@ public class TripDataFetcher {
     @PreAuthorize("hasAnyRole('USERS','ADMIN','PREMIUM')")
     @DgsQuery(field = "serarchTrips")
     public List<MyTrip> serarchTrips(@InputArgument("location") String location, @InputArgument("date") String date, @InputArgument("gender") int gender) {
-
         List<MyTrip> myTrips = null;
-        if (!location.equals("") && !date.equals("") && gender != 0) {
-            myTrips = tripsService.getTripByLocationDateGender(location, date, gender);
-        } else if (!location.equals("") && !date.equals("") && gender == 0) {
-            myTrips = tripsService.getTripByLocationDate(location, date);
-        } else if (location.equals("") && !date.equals("") && gender != 0) {
-            myTrips = tripsService.getTripByDateGender(date, gender);
-        } else if (!location.equals("") && date.equals("") && gender != 0) {
-            myTrips = tripsService.getTripByLocationGender(location, gender);
-        } else if (!location.equals("") && date.equals("") && gender == 0) {
-            myTrips = tripsService.getTripByLocation(location);
-        } else if (location.equals("") && !date.equals("") && gender == 0) {
-            myTrips = tripsService.getTripByDate(date);
-        } else if (location.equals("") && date.equals("") && gender != 0) {
-            myTrips = tripsService.getTripByGender(gender);
+        try {
+            if (!location.equals("") && !date.equals("") && gender != 0) {
+                myTrips = tripsService.getTripByLocationDateGender(location, date, gender);
+            } else if (!location.equals("") && !date.equals("") && gender == 0) {
+                myTrips = tripsService.getTripByLocationDate(location, date);
+            } else if (location.equals("") && !date.equals("") && gender != 0) {
+                myTrips = tripsService.getTripByDateGender(date, gender);
+            } else if (!location.equals("") && date.equals("") && gender != 0) {
+                myTrips = tripsService.getTripByLocationGender(location, gender);
+            } else if (!location.equals("") && date.equals("") && gender == 0) {
+                myTrips = tripsService.getTripByLocation(location);
+            } else if (location.equals("") && !date.equals("") && gender == 0) {
+                myTrips = tripsService.getTripByDate(date);
+            } else if (location.equals("") && date.equals("") && gender != 0) {
+                myTrips = tripsService.getTripByGender(gender);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return myTrips;
     }

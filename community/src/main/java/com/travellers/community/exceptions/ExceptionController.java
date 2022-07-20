@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionController {
-    @ExceptionHandler(value = UserNotFoundException.class)
-    public ResponseEntity<Object> exception() {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(value = UserNotFoundException.class)
+//    public UserNotFoundException exception(String msg) {
+//        return super(msg);
+//    }
 
     @ExceptionHandler(value = TripNotFoundException.class)
     public ResponseEntity<Object> tripException() {

@@ -16,7 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @DgsComponent
 public class UserDataFetcher {
@@ -36,6 +38,17 @@ public class UserDataFetcher {
     @Autowired
     private UserMapper userMapper;
 
+
+    public Map<Integer, String> userMap() {
+        Map<Integer, String> productRepo = new HashMap<>();
+        List<User> user_ = userRepository.findAll();
+
+        user_.forEach(user -> {
+            productRepo.put(user.getUser_id(), user.getEmail());
+        });
+        return productRepo;
+    }
+
     @PreAuthorize("isAnonymous()")
     @DgsData(parentType = "Mutation", field = "login")
     public String login(@InputArgument("email") String email, @InputArgument("password") String password) {
@@ -54,18 +67,10 @@ public class UserDataFetcher {
     @PreAuthorize("isAnonymous()")
     @DgsMutation(field = "createLoginUser")
     public Boolean createLoginUser(@InputArgument UserDto userInfo) {
-        User user_ = userRepository.findByEmail(userInfo.getEmail());
-        if (user_ == null) {
-            User user = userMapper.modelToDto(userInfo);
-            try {
-                userService.saveUser(user);
-            } catch (DuplicateEntryException e) {
-                throw new DuplicateEntryException();
-            }
-            return true;
-        } else {
-            return false;
-        }
+
+        if (!userMap().containsValue(userInfo.getEmail())) throw new DuplicateEntryException("Duplicate Entry Found");
+        User user = userMapper.modelToDto(userInfo);
+        return true;
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
@@ -86,11 +91,11 @@ public class UserDataFetcher {
         return userService.findAllUsers();
     }
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
+    //    @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsMutation(field = "editLoginUser")
     public User editLoginUser(@InputArgument("id") int id, @InputArgument UserDto userInfo) {
-        User user_ = userRepository.findById(id).get();
-        if (user_ == null) throw new UserNotFoundException();
+
+        if (!userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
         User user = userMapper.modelToDto(userInfo);
         user.setUser_id(id);
         return userService.editUser(user);
@@ -100,8 +105,7 @@ public class UserDataFetcher {
     @PreAuthorize("hasAnyRole('USER','ADMIN','PREMIUM')")
     @DgsQuery(field = "upgradeUser")
     public Boolean upgradeUser(@InputArgument("id") int id) {
-        User user_ = userRepository.findById(id).get();
-        if (user_ == null) throw new UserNotFoundException();
+        if (!userMap().containsKey(id)) throw new UserNotFoundException("User Not Found");
         try {
             return userService.upgradePremiumUser(id);
         } catch (NullPointerException e) {
